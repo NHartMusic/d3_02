@@ -1,16 +1,13 @@
 const data = [
-    { width: 200, height: 400, fill: 'red' }
+    { width: 200, height: 100, fill: 'purple' }
 ]
 
 const svg = d3.select('svg')
 
 const rect = svg.select('rect')
     .data(data)
-    .attr('width', function (d, i, n) {
-        console.log(i, n)
-        return d.width
-    })
-    .attr('height', function (d) { return d.height })
-    .attr('fill', function (d) { return d.fill })
+    .attr('width', (d, i, n) => d.width)
+    .attr('height', d => d.height)
+    .attr('fill', d => d.fill)
 
 console.log(rect)
