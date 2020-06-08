@@ -23,7 +23,7 @@ d3.json('menu.json').then(data => {
     const y = d3
         .scaleLinear()
         .domain([0, d3.max(data, d => d.orders)])
-        .range([0, graphHeight])
+        .range([graphHeight, 0])
 
     const x = d3
         .scaleBand()
@@ -39,17 +39,19 @@ d3.json('menu.json').then(data => {
 
     rects
         .attr('width', x.bandwidth)
-        .attr('height', d => y(d.orders))
+        .attr('height', d => graphHeight - y(d.orders))
         .attr('fill', 'orange')
         .attr('x', d => x(d.name))
+        .attr('y', d => y(d.orders))
 
     //append enter selection 
     rects.enter()
         .append('rect')
         .attr('width', x.bandwidth)
-        .attr('height', d => y(d.orders))
+        .attr('height', d => graphHeight - y(d.orders))
         .attr('fill', 'orange')
         .attr('x', d => x(d.name))
+        .attr('y', d => y(d.orders))
 
     const xAxis = d3.axisBottom(x)
     const yAxis = d3.axisLeft(y)
