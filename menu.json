@@ -14,5 +14,9 @@
     {
         "name": "guacamole burger",
         "orders": 900
+    },
+    {
+        "name": "chicken burger",
+        "orders": 1500
     }
 ]
