@@ -1,22 +1,27 @@
 [
     {
         "name": "BBQ Burger",
-        "orders": 200
+        "orders": 200,
+        "id": 1
     },
     {
         "name": "Halloumi Burger",
-        "orders": 600
+        "orders": 600,
+        "id": 2
     },
     {
         "name": "Bison Burger",
-        "orders": 300
+        "orders": 300,
+        "id": 3
     },
     {
         "name": "guacamole burger",
-        "orders": 900
+        "orders": 900,
+        "id": 4
     },
     {
         "name": "chicken burger",
-        "orders": 1500
+        "orders": 1500,
+        "id": 5
     }
 ]
