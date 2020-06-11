@@ -19,10 +19,16 @@ const xAxisGroup = graph.append('g')
     .attr('transform', `translate(0, ${graphHeight})`)
 const yAxisGroup = graph.append('g')
 
-const x = d3.json('menu_orders.json')
-const y = d3.json('menu.json')
 
-y.then(data => {
+
+db.collection('dishes').get().then(res => {
+
+    let data = []
+    res.docs.forEach(doc => {
+        data.push(doc.data())
+    })
+
+
     const y = d3
         .scaleLinear()
         .domain([0, d3.max(data, d => d.orders)])
