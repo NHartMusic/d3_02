@@ -15,37 +15,50 @@ const graph = svg
     .attr('height', graphHeight)
     .attr('transform', `translate(${margin.left}, ${margin.top})`)
 
+
 const xAxisGroup = graph.append('g')
     .attr('transform', `translate(0, ${graphHeight})`)
 const yAxisGroup = graph.append('g')
 
+//scales 
 
+const y = d3
+    .scaleLinear()
+    .range([graphHeight, 0])
 
-db.collection('dishes').get().then(res => {
+const x = d3
+    .scaleBand()
+    .range([0, 500])
+    .paddingInner(0.2)
+    .paddingOuter(0.2)
 
-    let data = []
-    res.docs.forEach(doc => {
-        data.push(doc.data())
-    })
+//create axes
+const xAxis = d3.axisBottom(x)
+const yAxis = d3.axisLeft(y)
+    .ticks(3)
+    .tickFormat(d => d + ' orders')
 
+// update x axis text
+xAxisGroup.selectAll('text')
+    .attr('transform', 'rotate(-40)')
+    .attr('text-anchor', 'end')
+    .attr('fill', 'orange')
 
-    const y = d3
-        .scaleLinear()
-        .domain([0, d3.max(data, d => d.orders)])
-        .range([graphHeight, 0])
+const update = (data) => {
 
-    const x = d3
-        .scaleBand()
-        .domain(data.map(item => item.name))
-        .range([0, 500])
-        .paddingInner(0.2)
-        .paddingOuter(0.2)
+    //updating scale domains
+    y.domain([0, d3.max(data, d => d.orders)])
+    x.domain(data.map(item => item.name))
 
     //join data to rects
     const rects = graph
         .selectAll('rect')
         .data(data)
 
+    //remove exit selection
+    rects.exit().remove()
+
+    //update current shapes in DOM
     rects
         .attr('width', x.bandwidth)
         .attr('height', d => graphHeight - y(d.orders))
@@ -62,16 +75,19 @@ db.collection('dishes').get().then(res => {
         .attr('x', d => x(d.name))
         .attr('y', d => y(d.orders))
 
-    const xAxis = d3.axisBottom(x)
-    const yAxis = d3.axisLeft(y)
-        .ticks(3)
-        .tickFormat(d => d + ' orders')
-
+    //call axes
     xAxisGroup.call(xAxis)
     yAxisGroup.call(yAxis)
 
-    xAxisGroup.selectAll('text')
-        .attr('transform', 'rotate(-40)')
-        .attr('text-anchor', 'end')
-        .attr('fill', 'orange')
+}
+
+db.collection('dishes').get().then(res => {
+
+    let data = []
+    res.docs.forEach(doc => {
+        data.push(doc.data())
+    })
+
+    update(data)
+
 })
